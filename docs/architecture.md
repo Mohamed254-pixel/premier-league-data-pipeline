@@ -3,9 +3,11 @@
 The local Phase 2 deployment completed its bootstrap, incremental repeat and
 [approved scheduler activation](phase2-scheduling-results.md). That dated report
 records a successful five-task scheduler-created run; present health must be
-checked rather than inferred from that report. Phase 3's separate
-[AWS candidate](../deploy/aws/README.md) is under development and is not deployed.
-The runtime selects football-data.org for season 2026; API-FOOTBALL remains the
+checked rather than inferred from that report. Phase 3 also completed as a
+separate, time-boxed [AWS demonstration](portfolio/phase3/README.md); EC2 was
+stopped afterward. The AWS report describes the resource state observed at its
+evidence capture, not a claim that cloud services are currently running. The
+runtime selects football-data.org for season 2026; API-FOOTBALL remains the
 compatibility default in code.
 
 ## Scope
@@ -85,4 +87,4 @@ The DAG must be unpaused and scheduler/workers must remain running for automatic
 
 The offline suite blocks unmocked HTTP/MySQL access and disables private dotenv loading. Opt-in real MySQL tests create fresh random test databases, seed the original archive, exercise migrations/upserts/transactions and the five-stage flow with a mocked API, then remove only their own test databases. GitHub Actions runs Python 3.11, with separate full-suite MySQL 8.0 and actual Airflow 3.3.1 import jobs. `check_readiness.py` performs read-only environment checks without activating the ETL.
 
-Real API refresh and application-database migration are separate from automated tests. Mocked responses prove parsing/branch behavior, while real database tests verify SQL semantics; neither proves subscription access or live API completeness. The integrity check depends on retaining trusted archive CSVs. Team/venue snapshots are per season, not a full history of every metadata change within a season. Staging retention is manual. Monitoring, AWS, dbt, and other datasets remain future work.
+Real API refresh and application-database migration are separate from automated tests. Mocked responses prove parsing/branch behavior, while real database tests verify SQL semantics; neither proves subscription access or live API completeness. The integrity check depends on retaining trusted archive CSVs. Team/venue snapshots are per season, not a full history of every metadata change within a season. Staging retention is manual. The AWS deployment was a verified but time-boxed demonstration; it is not an always-on service. dbt and additional datasets remain future work.
