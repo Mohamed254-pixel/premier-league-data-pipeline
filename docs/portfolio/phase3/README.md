@@ -87,8 +87,10 @@ development requirements. Coverage includes extraction with mocked APIs,
 incremental updates, multi-season constraints, idempotency, S3 conditional
 archive writes, demo initialization, and simulated timer decisions. Airflow
 3.3.1 imported the manual-only DAG both locally and in the demo image.
-CloudFormation lint and Docker Compose validation passed. Hosted CI for this
-branch is pending publication. A staging-permissions regression test now
+CloudFormation lint and Docker Compose validation passed. The Phase 3 code was
+published in PR #10 and merged to `main` at `29bbe464`; the [main-branch Actions
+run](https://github.com/Mohamed254-pixel/premier-league-data-pipeline/actions/runs/42969764703)
+succeeded across all five jobs. A staging-permissions regression test now
 checks the exact directory mode, application write access, non-recursive
 behavior and least-privilege container settings.
 
@@ -98,11 +100,12 @@ readings showed $0.00 against the $10 monthly budget, but billing data can lag;
 this is not a final invoice. The account previously showed $120 in credits.
 The encrypted disk, bucket and secret can accrue charges after stopping EC2.
 
-## Evidence still to collect
+## Publication and cleanup status
 
-GitHub Actions remains pending publication. The CloudFormation stack, EBS
-volume, S3 archive and Secrets Manager secret are retained; deletion requires
-separate approval. The instance is stopped, which ends compute and its
+GitHub Actions is published and passed on `main`. The CloudFormation stack, EBS
+volume, S3 archive and Secrets Manager secret were retained at evidence capture.
+Teardown was separately approved on November 18; its completion and current
+billing are not verified in this report. The instance is stopped, which ends compute and its
 auto-assigned IPv4 charges, but retained storage and the secret may continue
 to accrue charges. This directory contains sanitized summaries and a diagram.
 Keep credentials, raw command output, internal network addresses, database
