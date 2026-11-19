@@ -4,6 +4,12 @@ An end-to-end Python ETL pipeline that collects Premier League fixtures from foo
 
 [![Tests](https://github.com/Mohamed254-pixel/premier-league-data-pipeline/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/Mohamed254-pixel/premier-league-data-pipeline/actions/workflows/tests.yml)
 
+## Architecture
+
+![Architecture diagram showing the Premier League data pipeline from provider REST APIs through Python extraction, Pandas normalization, run-scoped staging, the five Airflow tasks, MySQL validation, checkpoints, and AWS-demo-only S3 archival.](docs/portfolio/images/pipeline-architecture.png)
+
+The diagram distinguishes the weekly local workflow from the isolated, manual-only AWS demonstration. Detailed design and incremental processing behavior are in the [architecture guide](docs/architecture.md).
+
 ## Project highlights
 
 - **760 fixtures recorded across two seasons** in the verified local database snapshot: 380 archived 2024–25 fixtures and 380 season-2026 fixtures.
@@ -15,30 +21,13 @@ An end-to-end Python ETL pipeline that collects Premier League fixtures from foo
 
 > These counts are dated verification snapshots, not a live database query. Local service availability and later scheduled runs have not been verified. The AWS deployment was a demonstration, not an always-on service.
 
-## Architecture
+![Verified results visualization showing 760 fixtures in the local two-season snapshot, five successful Airflow tasks, and the AWS demo's 380 first-run inserts plus 30 reprocessed fixtures.](docs/portfolio/images/verified-results.png)
 
-```mermaid
-flowchart LR
-    API[football-data.org or API-FOOTBALL] --> PY[Python adapters and Pandas normalization]
-    PY --> STAGE[Run-scoped validated staging]
-    AIRFLOW[Apache Airflow: local weekly; AWS demo manual-only] -. orchestrates .-> T1[1. extract_matches]
-    T1 --> T2[2. extract_teams_and_venues]
-    T2 --> T3[3. load_teams_and_venues]
-    T3 --> T4[4. load_matches]
-    T4 --> T5[5. validate_data_quality]
-    STAGE --> T3
-    STAGE --> T4
-    T4 --> DB[(MySQL: local app DB or isolated AWS demo DB)]
-    T5 --> CKPT[Commit success checkpoint]
-    DB --> T5
-    PY -. raw responses in AWS demo only .-> S3[(Private, versioned S3 raw archive)]
-```
+*Visualization derived from documented execution records; this is not a screenshot of a live deployment.*
 
-The local deployment and AWS demonstration were isolated environments. The AWS demonstration ran on EC2 with Docker and an isolated MySQL database; raw provider responses were archived to S3. Its copied DAG was manual-only and paused after supervised runs. For the detailed component and data-model design, see [architecture](docs/architecture.md) and [data model](docs/data-model.md).
+## Execution evidence
 
-## Screenshots and execution evidence
-
-No authentic Airflow, database-client, or AWS console screenshots were retained in the repository. Rather than substitute mock UI images, the project links to sanitized execution records and live GitHub Actions status:
+The figures above summarize the dated records below; they do not represent current live service health:
 
 | Evidence | Verified result | Record |
 | --- | --- | --- |
